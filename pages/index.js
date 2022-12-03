@@ -1,9 +1,11 @@
 import Head from 'next/head';
 import Image from 'next/image';
 import Banner from '../components/Banner/Banner';
+import Card from '../components/Card/Card';
 import styles from '../styles/Home.module.css';
+import coffeeStores from '../data/coffee-stores.json';
 
-export default function Home() {
+export default function Home({ coffeeStores }) {
 	const handleOnBannerBtnClick = () => {
 		console.log('akira banner button clicked');
 	};
@@ -23,7 +25,28 @@ export default function Home() {
 				<div className={styles.heroImage}>
 					<Image src='/static/hero-image.png' alt='' width={700} height={400} />
 				</div>
+				<div className={styles.cardLayout}>
+					{coffeeStores.map((store, idx) => {
+						return (
+							<Card
+								key={idx}
+								className={styles.card}
+								name={store.name}
+								href={`/coffee-store/${store.name}`}
+								imgUrl={store.imgUrl}
+							/>
+						);
+					})}
+				</div>
 			</main>
 		</div>
 	);
 }
+
+export const getStaticProps = async (context) => {
+	return {
+		props: {
+			coffeeStores,
+		},
+	};
+};
