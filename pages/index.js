@@ -35,7 +35,7 @@ export default function Home({ coffeeStores }) {
 										key={idx}
 										className={styles.card}
 										name={store.name}
-										href={`/coffee-store/${store.name}`}
+										href={`/coffee-store/${store.id}`}
 										imgUrl={store.imgUrl}
 									/>
 								);
