@@ -3,8 +3,7 @@ import Image from 'next/image';
 import Banner from '../components/Banner/Banner';
 import Card from '../components/Card/Card';
 import styles from '../styles/Home.module.css';
-import coffeeStores from '../data/coffee-stores.json';
-import axios from 'axios';
+import { fetchCoffeeStores } from '../lib/coffee-stores';
 
 export default function Home({ coffeeStores }) {
 	const handleOnBannerBtnClick = () => {
@@ -53,20 +52,11 @@ export default function Home({ coffeeStores }) {
 }
 
 export const getStaticProps = async (context) => {
-	const res = await axios.get(
-		'https://api.foursquare.com/v3/places/search?query=coffee&ll=35.57%2C139.56&limit=6',
-		{
-			headers: {
-				Authorization: process.env.FOURSQUARE_API_KEY,
-			},
-		}
-	);
-
-	const data = res.data;
+	const coffeeStores = await fetchCoffeeStores();
 
 	return {
 		props: {
-			coffeeStores: data.results,
+			coffeeStores,
 		},
 	};
 };
