@@ -25,19 +25,24 @@ export default function Home({ coffeeStores }) {
 				<div className={styles.heroImage}>
 					<Image src='/static/hero-image.png' alt='' width={700} height={400} />
 				</div>
-				<div className={styles.cardLayout}>
-					{coffeeStores.map((store, idx) => {
-						return (
-							<Card
-								key={idx}
-								className={styles.card}
-								name={store.name}
-								href={`/coffee-store/${store.name}`}
-								imgUrl={store.imgUrl}
-							/>
-						);
-					})}
-				</div>
+				{coffeeStores.length > 0 && (
+					<>
+						<h2 className={styles.heading2}>Toronto Stores</h2>
+						<div className={styles.cardLayout}>
+							{coffeeStores.map((store, idx) => {
+								return (
+									<Card
+										key={idx}
+										className={styles.card}
+										name={store.name}
+										href={`/coffee-store/${store.name}`}
+										imgUrl={store.imgUrl}
+									/>
+								);
+							})}
+						</div>
+					</>
+				)}
 			</main>
 		</div>
 	);
