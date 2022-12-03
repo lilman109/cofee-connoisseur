@@ -2,24 +2,41 @@ import React from 'react';
 import { useRouter } from 'next/router';
 import Link from 'next/link';
 import coffeestores from '../../../data/coffee-stores.json';
+import Head from 'next/head';
 
 export const CoffeStore = ({ coffeeStore }) => {
-	const router = useRouter().query.id;
+	const router = useRouter();
+
+	if (router.isFallback) {
+		console.log('akira loading');
+		return <div>Loading....</div>;
+	}
+
+	const { address, name, neighbourhood } = coffeeStore;
 	return (
 		<div>
-			Coffee Store Page {router}
+			<Head>
+				<title>{name}</title>
+			</Head>
 			<Link href={'/'}>Back to Home</Link>
-			<Link href='/coffee-store/dynamic'>Go to Dynamic Page</Link>
-			<p>{coffeeStore.address}</p>
-			<p>{coffeeStore.name}</p>
+			<p>{address}</p>
+			<p>{name}</p>
+			<p>{neighbourhood}</p>
 		</div>
 	);
 };
 
 export const getStaticPaths = async (context) => {
+	const paths = coffeestores.map((store) => {
+		return {
+			params: {
+				id: store.id.toString(),
+			},
+		};
+	});
 	return {
-		paths: [{ params: { id: '0' } }, { params: { id: '1' } }],
-		fallback: false,
+		paths,
+		fallback: 'blocking',
 	};
 };
 
