@@ -1,17 +1,16 @@
 import React from 'react';
 import { useRouter } from 'next/router';
 import Link from 'next/link';
-import coffeestores from '../../../data/coffee-stores.json';
 import Head from 'next/head';
 import styles from './CoffeeStore.module.css';
 import Image from 'next/image';
 import cls from 'classnames';
+import { fetchCoffeeStores } from '../../../lib/coffee-stores';
 
 export const CoffeStore = ({ coffeeStore }) => {
 	const router = useRouter();
 
 	if (router.isFallback) {
-		console.log('akira loading');
 		return <div>Loading....</div>;
 	}
 
@@ -19,7 +18,8 @@ export const CoffeStore = ({ coffeeStore }) => {
 		console.log('handle upvote');
 	};
 
-	const { address, name, neighbourhood, imgUrl } = coffeeStore;
+	const { name, neighborhood, imgUrl, location } = coffeeStore;
+	console.log('foo neighborhood', neighborhood);
 	return (
 		<div className={styles.layout}>
 			<Head>
@@ -34,19 +34,33 @@ export const CoffeStore = ({ coffeeStore }) => {
 					<div className={styles.nameWrapper}>
 						<p className={styles.name}>{name}</p>
 					</div>
-					<Image src={imgUrl} width={600} height={360} alt={name} />
+					<Image
+						src={
+							imgUrl ||
+							'https://images.unsplash.com/photo-1504753793650-d4a2b783c15e?ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&ixlib=rb-1.2.1&auto=format&fit=crop&w=2000&q=80'
+						}
+						width={600}
+						height={360}
+						alt={name}
+					/>
 				</div>
 
 				<div className={cls('glass', styles.col2)}>
-					<div className={styles.iconWwrapper}>
+					<div className={styles.iconWrapper}>
 						<Image src='/static/icons/places.svg' width={'24'} height={'24'} />
-						<p className={styles.text}>{address}</p>
+						<p className={styles.text}>{location.address}</p>
 					</div>
-					<div className={styles.iconWwrapper}>
-						<Image src='/static/icons/nearMe.svg' width={'24'} height={'24'} />
-						<p className={styles.text}>{neighbourhood}</p>
-					</div>
-					<div className={styles.iconWwrapper}>
+					{neighborhood && neighborhood.length > 0 && (
+						<div className={styles.iconWrapper}>
+							<Image
+								src='/static/icons/nearMe.svg'
+								width={'24'}
+								height={'24'}
+							/>
+							<p className={styles.text}>{neighborhood}</p>
+						</div>
+					)}
+					<div className={styles.iconWrapper}>
 						<Image src='/static/icons/star.svg' width={'24'} height={'24'} />
 						<p className={styles.text}>{1}</p>
 					</div>
@@ -61,10 +75,11 @@ export const CoffeStore = ({ coffeeStore }) => {
 };
 
 export const getStaticPaths = async (context) => {
-	const paths = coffeestores.map((store) => {
+	const coffeeStores = await fetchCoffeeStores();
+	const paths = coffeeStores.map((store) => {
 		return {
 			params: {
-				id: store.id.toString(),
+				id: store.fsq_id.toString(),
 			},
 		};
 	});
@@ -75,10 +90,12 @@ export const getStaticPaths = async (context) => {
 };
 
 export const getStaticProps = async ({ params }) => {
+	const coffeeStores = await fetchCoffeeStores();
+	console.log('foo coffee stores', coffeeStores);
 	return {
 		props: {
-			coffeeStore: coffeestores.find((store) => {
-				return store.id.toString() === params.id;
+			coffeeStore: coffeeStores.find((store) => {
+				return store.fsq_id.toString() === params.id;
 			}),
 		},
 	};

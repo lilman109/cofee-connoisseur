@@ -7,7 +7,7 @@ import { fetchCoffeeStores } from '../lib/coffee-stores';
 
 export default function Home({ coffeeStores }) {
 	const handleOnBannerBtnClick = () => {
-		console.log('akira banner button clicked');
+		console.log('foo banner button clicked');
 	};
 
 	return (
