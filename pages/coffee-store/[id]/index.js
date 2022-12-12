@@ -29,7 +29,7 @@ export const CoffeStore = ({ coffeeStore }) => {
 			<div className={styles.container}>
 				<div className={styles.col1}>
 					<div className={styles.backToHomeLink}>
-						<Link href={'/'}>Back to Home</Link>
+						<Link href={'/'}>← Back to Home</Link>
 					</div>
 					<div className={styles.nameWrapper}>
 						<p className={styles.name}>{name}</p>
