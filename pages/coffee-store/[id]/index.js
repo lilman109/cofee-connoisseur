@@ -18,7 +18,7 @@ export const CoffeStore = ({ coffeeStore }) => {
 		console.log('handle upvote');
 	};
 
-	const { name, neighborhood, imgUrl, location } = coffeeStore;
+	const { name, neighborhood, imgUrl, address } = coffeeStore;
 	console.log('foo neighborhood', neighborhood);
 	return (
 		<div className={styles.layout}>
@@ -47,8 +47,13 @@ export const CoffeStore = ({ coffeeStore }) => {
 
 				<div className={cls('glass', styles.col2)}>
 					<div className={styles.iconWrapper}>
-						<Image src='/static/icons/places.svg' width={'24'} height={'24'} />
-						<p className={styles.text}>{location.address}</p>
+						<Image
+							src='/static/icons/places.svg'
+							width={'24'}
+							height={'24'}
+							alt=''
+						/>
+						<p className={styles.text}>{address}</p>
 					</div>
 					{neighborhood && neighborhood.length > 0 && (
 						<div className={styles.iconWrapper}>
@@ -61,7 +66,12 @@ export const CoffeStore = ({ coffeeStore }) => {
 						</div>
 					)}
 					<div className={styles.iconWrapper}>
-						<Image src='/static/icons/star.svg' width={'24'} height={'24'} />
+						<Image
+							src='/static/icons/star.svg'
+							width={'24'}
+							height={'24'}
+							alt=''
+						/>
 						<p className={styles.text}>{1}</p>
 					</div>
 
@@ -79,7 +89,7 @@ export const getStaticPaths = async (context) => {
 	const paths = coffeeStores.map((store) => {
 		return {
 			params: {
-				id: store.fsq_id.toString(),
+				id: store.id.toString(),
 			},
 		};
 	});
@@ -95,7 +105,7 @@ export const getStaticProps = async ({ params }) => {
 	return {
 		props: {
 			coffeeStore: coffeeStores.find((store) => {
-				return store.fsq_id.toString() === params.id;
+				return store.id.toString() === params.id;
 			}),
 		},
 	};
