@@ -52,7 +52,7 @@ export const CoffeStore = ({ coffeeStore }) => {
           </div>
           {neighborhood && neighborhood.length > 0 && (
             <div className={styles.iconWrapper}>
-              <Image src="/static/icons/nearMe.svg" width={"24"} height={"24"} />
+              <Image src="/static/icons/nearMe.svg" width={"24"} height={"24"} alt="" />
               <p className={styles.text}>{neighborhood}</p>
             </div>
           )}
@@ -70,7 +70,7 @@ export const CoffeStore = ({ coffeeStore }) => {
   );
 };
 
-export const getStaticPaths = async (context) => {
+export const getStaticPaths = async () => {
   const coffeeStores = await fetchCoffeeStores();
   const paths = coffeeStores.map((store) => {
     return {

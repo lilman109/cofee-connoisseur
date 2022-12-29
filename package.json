@@ -7,7 +7,7 @@
     "build": "next build",
     "start": "next start",
     "prettier": "prettier --write --ignore-path .gitignore './**/*.{js,jsx,ts,tsx,json}'",
-    "lint": "eslint --fix . --ext js --ext jsx",
+    "lint": "next lint",
     "format": "eslint --fix . --ext js --ext jsx && prettier --write --ignore-path .gitignore './**/*.{js,jsx,ts,tsx,json}'"
   },
   "dependencies": {
@@ -15,6 +15,7 @@
     "classnames": "^2.3.2",
     "eslint": "8.28.0",
     "eslint-config-next": "13.0.4",
+    "eslint-plugin-unused-imports": "^2.0.0",
     "next": "13.0.4",
     "react": "18.2.0",
     "react-dom": "18.2.0",

@@ -26,7 +26,7 @@ export default function Home({ coffeeStores }) {
           <>
             <h2 className={styles.heading2}>Toronto Stores</h2>
             <div className={styles.cardLayout}>
-              {coffeeStores.map((store, idx) => {
+              {coffeeStores.map((store) => {
                 return (
                   <Card
                     key={store.id}
@@ -48,7 +48,7 @@ export default function Home({ coffeeStores }) {
   );
 }
 
-export const getStaticProps = async (context) => {
+export const getStaticProps = async () => {
   const coffeeStores = await fetchCoffeeStores();
 
   return {
