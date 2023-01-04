@@ -5,16 +5,31 @@ import Card from "../components/Card/Card";
 import styles from "../styles/Home.module.css";
 import { fetchCoffeeStores } from "../lib/coffee-stores";
 import useTrackLocation from "../hooks/use-track-locations";
+import { useEffect } from "react";
 
 export default function Home({ coffeeStores }) {
   const { handleTrackLocation, latLong, errorMessage, isFindingLocation } = useTrackLocation();
 
-  console.log({ latLong, errorMessage });
-
   const handleOnBannerBtnClick = () => {
-    console.log("foo banner button clicked");
     handleTrackLocation();
   };
+
+  useEffect(() => {
+    const getCoffeeStores = async () => {
+      console.log("akiraaaa")
+    if (latLong) {
+      try {
+          console.log("akira latlong", latLong)
+        const fetchedCoffeeStores = await fetchCoffeeStores(latLong);
+        console.log("akira fetchedCoffeeStores", fetchedCoffeeStores)
+      } catch {
+        return;
+      }
+    }
+
+    }
+      getCoffeeStores();
+  },[latLong])
 
   return (
     <div className={styles.container}>
