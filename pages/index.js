@@ -17,16 +17,16 @@ export default function Home(props) {
       if (latLong) {
         try {
           const fetchedCoffeeStores = await fetchCoffeeStores(latLong, 30);
-          setCoffeeStores(fetchedCoffeeStores)
+          setCoffeeStores(fetchedCoffeeStores);
         } catch (error) {
-          setCoffeeStoresError(error.message)
+          setCoffeeStoresError(error.message);
           return;
         }
       }
-    }
+    };
 
     getCoffeeStores();
-  },[latLong])
+  }, [latLong]);
 
   const handleOnBannerBtnClick = () => {
     handleTrackLocation();
