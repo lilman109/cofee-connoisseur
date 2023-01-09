@@ -6,41 +6,37 @@ import styles from "./CoffeeStore.module.css";
 import Image from "next/image";
 import cls from "classnames";
 import { fetchCoffeeStores } from "../../../lib/coffee-stores";
-import { StoreContext } from "../../_app";
+import { StoreContext } from "../../../context/store-context";
 import { isEmpty } from "../../../utils";
 
-export const CoffeStore = ( initialProps ) => {
+export const CoffeStore = (initialProps) => {
   const router = useRouter();
   const id = router.query.id;
-  const [coffeeStore, setCoffeeStore] = useState(initialProps.coffeeStore)
-  const {state:{coffeeStores}} = useContext(StoreContext)
+  const [coffeeStore, setCoffeeStore] = useState(initialProps.coffeeStore);
+  const {
+    state: { coffeeStores },
+  } = useContext(StoreContext);
+
+  useEffect(() => {
+    if (!isEmpty(initialProps.coffeeStore)) return;
+    if (coffeeStores.length < 1) return;
+
+    const found = coffeeStores.find((store) => {
+      return store.id.toString() === id;
+    });
+    setCoffeeStore(found);
+  }, [id]);
+
+  const { name, neighborhood, imgUrl, address } = coffeeStore;
+
+  const handleUpvoteButton = () => {
+    console.log("handle upvote");
+  };
 
   if (router.isFallback) {
     return <div>Loading....</div>;
   }
 
-  useEffect(() => {
-    console.log("akira coffeeStore", initialProps.coffeeStore)
-    if (isEmpty(initialProps.coffeeStore)) {
-      console.log("akira initial props")
-      if (coffeeStores.length > 0) {
-      console.log("akira coffeeStores")
-        const found = coffeeStores.find((store) => {
-        return store.id.toString() === id;
-        });
-
-        console.log("akira found", found)
-        setCoffeeStore(found)
-      }
-    }
-  },[id])
-
-  const { name, neighborhood, imgUrl, address } = coffeeStore;
-  const handleUpvoteButton = () => {
-    console.log("handle upvote");
-  };
-
-  console.log("foo neighborhood", neighborhood);
   return (
     <div className={styles.layout}>
       <Head>

@@ -6,7 +6,7 @@ import styles from "../styles/Home.module.css";
 import { fetchCoffeeStores } from "../lib/coffee-stores";
 import useTrackLocation from "../hooks/use-track-locations";
 import { useContext, useEffect, useState } from "react";
-import { ACTION_TYPES, StoreContext } from "./_app";
+import { ACTION_TYPES, StoreContext } from "./../context/store-context";
 
 export default function Home(props) {
   const { handleTrackLocation, errorMessage, isFindingLocation } = useTrackLocation();
