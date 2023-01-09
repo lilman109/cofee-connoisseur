@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useContext, useEffect, useState } from "react";
 import { useRouter } from "next/router";
 import Link from "next/link";
 import Head from "next/head";
@@ -6,19 +6,40 @@ import styles from "./CoffeeStore.module.css";
 import Image from "next/image";
 import cls from "classnames";
 import { fetchCoffeeStores } from "../../../lib/coffee-stores";
+import { StoreContext } from "../../_app";
+import { isEmpty } from "../../../utils";
 
-export const CoffeStore = ({ coffeeStore }) => {
+export const CoffeStore = ( initialProps ) => {
   const router = useRouter();
+  const id = router.query.id;
+  const [coffeeStore, setCoffeeStore] = useState(initialProps.coffeeStore)
+  const {state:{coffeeStores}} = useContext(StoreContext)
 
   if (router.isFallback) {
     return <div>Loading....</div>;
   }
 
+  useEffect(() => {
+    console.log("akira coffeeStore", initialProps.coffeeStore)
+    if (isEmpty(initialProps.coffeeStore)) {
+      console.log("akira initial props")
+      if (coffeeStores.length > 0) {
+      console.log("akira coffeeStores")
+        const found = coffeeStores.find((store) => {
+        return store.id.toString() === id;
+        });
+
+        console.log("akira found", found)
+        setCoffeeStore(found)
+      }
+    }
+  },[id])
+
+  const { name, neighborhood, imgUrl, address } = coffeeStore;
   const handleUpvoteButton = () => {
     console.log("handle upvote");
   };
 
-  const { name, neighborhood, imgUrl, address } = coffeeStore;
   console.log("foo neighborhood", neighborhood);
   return (
     <div className={styles.layout}>
