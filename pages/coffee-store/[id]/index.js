@@ -81,19 +81,20 @@ export const getStaticPaths = async () => {
   });
   return {
     paths,
-    fallback: "blocking",
+    fallback: true,
   };
 };
 
 export const getStaticProps = async ({ params }) => {
   const coffeeStores = await fetchCoffeeStores();
   console.log("foo coffee stores", coffeeStores);
+  const found = coffeeStores.find((store) => {
+        return store.id.toString() === params.id;
+      })
+
   return {
     props: {
-      coffeeStore: coffeeStores.find((store) => {
-        return store.id.toString() === params.id;
-      }),
-    },
+      coffeeStore: found ? found : {}    },
   };
 };
 
