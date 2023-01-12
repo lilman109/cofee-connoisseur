@@ -7,6 +7,7 @@ import { fetchCoffeeStores } from "../lib/coffee-stores";
 import useTrackLocation from "../hooks/use-track-locations";
 import { useContext, useEffect, useState } from "react";
 import { ACTION_TYPES, StoreContext } from "./../context/store-context";
+import axios from "axios";
 
 export default function Home(props) {
   const { handleTrackLocation, errorMessage, isFindingLocation } = useTrackLocation();
@@ -19,7 +20,8 @@ export default function Home(props) {
     const getCoffeeStores = async () => {
       if (latLong) {
         try {
-          const fetchedCoffeeStores = await fetchCoffeeStores(latLong, 30);
+          const res = await axios.get(`/api/getCoffeeStoresByLocation?latLong=${latLong}&limit=30`);
+          const fetchedCoffeeStores = res.data;
 
           dispatch({
             type: ACTION_TYPES.SET_COFFEE_STORES,
@@ -50,7 +52,6 @@ export default function Home(props) {
         <Banner
           buttonText={isFindingLocation ? "Locating..." : "View stores nearby"}
           handleOnBannerBtnClick={handleOnBannerBtnClick}
-          isFindingLocation={isFindingLocation}
         />
         {errorMessage && <p>Something went wrong: {errorMessage}</p>}
         {coffeeStoresError && <p>Something went wrong: {errorMessage}</p>}
