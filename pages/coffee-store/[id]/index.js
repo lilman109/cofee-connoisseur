@@ -8,6 +8,7 @@ import cls from "classnames";
 import { fetchCoffeeStores } from "../../../lib/coffee-stores";
 import { StoreContext } from "../../../context/store-context";
 import { isEmpty } from "../../../utils";
+import axios from "axios";
 
 export const CoffeStore = (initialProps) => {
   const router = useRouter();
@@ -24,10 +25,32 @@ export const CoffeStore = (initialProps) => {
     const found = coffeeStores.find((store) => {
       return store.id.toString() === id;
     });
-    setCoffeeStore(found);
+
+    if (found) {
+      console.log("akira found", found)
+      setCoffeeStore(found);
+      handleCreateCoffeeStore(found);
+    }
   }, [id]);
 
-  const { name, neighborhood, imgUrl, address } = coffeeStore;
+  const { name, neighborhood, imgUrl, address} = coffeeStore;
+
+  const handleCreateCoffeeStore = async (coffeeStore) => {
+    try {
+      const res = await axios.post(`/api/createCoffeeStore`, {
+        id,
+        neighborhood: neighborhood || "",
+        address: address || "",
+        votes: 0,
+        ...coffeeStore,
+      });
+
+      const dbCoffeeStore = res.data;
+      console.log("akira db coffee store", dbCoffeeStore);
+    } catch (error) {
+      console.log("Error creating coffee store", error);
+    }
+  };
 
   const handleUpvoteButton = () => {
     console.log("handle upvote");
