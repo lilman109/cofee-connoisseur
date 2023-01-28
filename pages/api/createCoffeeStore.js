@@ -1,4 +1,4 @@
-import { getMinifiedRecords, table } from "../../lib/airtable";
+import { findRecordByFilter, getMinifiedRecords, table } from "../../lib/airtable";
 
 const createCoffeeStore = async (req, res) => {
   console.log({ req });
@@ -8,14 +8,8 @@ const createCoffeeStore = async (req, res) => {
 
     try {
       if (id) {
-        const findCoffeeStoreRecords = await table
-          .select({
-            filterByFormula: `id="${id}"`,
-          })
-          .firstPage();
-
-        if (findCoffeeStoreRecords.length !== 0) {
-          const records = getMinifiedRecords(findCoffeeStoreRecords);
+        const records = await findRecordByFilter(id);
+        if (records.length !== 0) {
           res.json(records);
         } else {
           if (name) {
@@ -46,7 +40,7 @@ const createCoffeeStore = async (req, res) => {
     } catch (error) {
       console.log("akira error");
       res.status(500);
-      res.json({ message: "Error creating or finding a store", err });
+      res.json({ message: "Error creating or finding a store", error });
     }
   }
 };

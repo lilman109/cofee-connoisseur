@@ -32,7 +32,8 @@ export const CoffeStore = (initialProps) => {
     }
   }, [id, initialProps, initialProps.coffeeStore]);
 
-  const { name, neighborhood, imgUrl, address } = coffeeStore;
+  const { name, neighborhood, imgUrl, address, voting } = coffeeStore;
+  const [votingCount, setVotingCount] = useState(0)
 
   const handleCreateCoffeeStore = async (coffeeStore) => {
     console.log("akira handle createCoffeeStore");
@@ -54,6 +55,7 @@ export const CoffeStore = (initialProps) => {
 
   const handleUpvoteButton = () => {
     console.log("handle upvote");
+    setVotingCount(prevState => prevState + 1)
   };
 
   if (router.isFallback) {
@@ -98,7 +100,7 @@ export const CoffeStore = (initialProps) => {
           )}
           <div className={styles.iconWrapper}>
             <Image src="/static/icons/star.svg" width={"24"} height={"24"} alt="" />
-            <p className={styles.text}>{1}</p>
+            <p className={styles.text}>{votingCount}</p>
           </div>
 
           <button className={styles.upvoteButton} onClick={handleUpvoteButton}>
