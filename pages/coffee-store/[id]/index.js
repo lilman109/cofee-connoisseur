@@ -7,7 +7,6 @@ import Image from "next/image";
 import cls from "classnames";
 import { fetchCoffeeStores } from "../../../lib/coffee-stores";
 import { StoreContext } from "../../../context/store-context";
-import { isEmpty } from "../../../utils";
 import axios from "axios";
 
 export const CoffeStore = (initialProps) => {
@@ -19,23 +18,24 @@ export const CoffeStore = (initialProps) => {
   } = useContext(StoreContext);
 
   useEffect(() => {
-    if (!isEmpty(initialProps.coffeeStore)) return;
-    if (coffeeStores.length < 1) return;
+    if (initialProps.coffeeStore.length > 0) {
+      const found = coffeeStores.find((store) => {
+        return store.id.toString() === id;
+      });
 
-    const found = coffeeStores.find((store) => {
-      return store.id.toString() === id;
-    });
-
-    if (found) {
-      console.log("akira found", found)
-      setCoffeeStore(found);
-      handleCreateCoffeeStore(found);
+      if (found) {
+        setCoffeeStore(found);
+        handleCreateCoffeeStore(found);
+      }
+    } else {
+      handleCreateCoffeeStore(initialProps.coffeeStore);
     }
-  }, [id]);
+  }, [id, initialProps, initialProps.coffeeStore]);
 
-  const { name, neighborhood, imgUrl, address} = coffeeStore;
+  const { name, neighborhood, imgUrl, address } = coffeeStore;
 
   const handleCreateCoffeeStore = async (coffeeStore) => {
+    console.log("akira handle createCoffeeStore");
     try {
       const res = await axios.post(`/api/createCoffeeStore`, {
         id,
