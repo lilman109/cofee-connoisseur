@@ -3,7 +3,7 @@ import { fetchCoffeeStores } from "../../lib/coffee-stores";
 const getCoffeeStoresByLocation = async (req, res) => {
   try {
     const { latLong, limit } = req.query;
-    console.log("akira query", {latLong, limit})
+    console.log("latlong", {latLong, limit})
     const response = await fetchCoffeeStores(latLong, limit);
     res.status(200);
     res.json(response);

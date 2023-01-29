@@ -8,6 +8,8 @@ import cls from "classnames";
 import { fetchCoffeeStores } from "../../../lib/coffee-stores";
 import { StoreContext } from "../../../context/store-context";
 import axios from "axios";
+import useSWR from "swr";
+import { fetcher } from "../../../utils";
 
 export const CoffeStore = (initialProps) => {
   const router = useRouter();
@@ -32,11 +34,19 @@ export const CoffeStore = (initialProps) => {
     }
   }, [id, initialProps, initialProps.coffeeStore]);
 
-  const { name, neighborhood, imgUrl, address, voting } = coffeeStore;
-  const [votingCount, setVotingCount] = useState(0)
+  const { name, neighborhood, imgUrl, address } = coffeeStore;
+  const [votingCount, setVotingCount] = useState(0);
+
+  const { data, error } = useSWR(`/api/getCoffeeStoreById?id=${id}`, fetcher);
+
+  useEffect(() => {
+    if (data && data.length > 0) {
+      setCoffeeStore(data[0]);
+      setVotingCount(data[0].votes);
+    }
+  }, [data]);
 
   const handleCreateCoffeeStore = async (coffeeStore) => {
-    console.log("akira handle createCoffeeStore");
     try {
       const res = await axios.post(`/api/createCoffeeStore`, {
         id,
@@ -47,19 +57,34 @@ export const CoffeStore = (initialProps) => {
       });
 
       const dbCoffeeStore = res.data;
-      console.log("akira db coffee store", dbCoffeeStore);
+      console.log("db coffee store", dbCoffeeStore);
     } catch (error) {
       console.log("Error creating coffee store", error);
     }
   };
 
-  const handleUpvoteButton = () => {
+  const handleUpvoteButton = async () => {
     console.log("handle upvote");
-    setVotingCount(prevState => prevState + 1)
+    try {
+      const res = await axios.put(`/api/upvotingCoffeeStoreById`, {
+        id,
+      });
+
+      const dbCoffeeStore = res.data;
+      if (dbCoffeeStore && dbCoffeeStore.length > 0) {
+        setVotingCount((prevState) => prevState + 1);
+      }
+    } catch (error) {
+      console.log("Error upvoting coffee store", error);
+    }
   };
 
   if (router.isFallback) {
     return <div>Loading....</div>;
+  }
+
+  if (error) {
+    return <div>Something went wrong retrieving coffee store page</div>;
   }
 
   return (

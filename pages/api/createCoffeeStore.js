@@ -38,7 +38,6 @@ const createCoffeeStore = async (req, res) => {
         res.json("Missing id");
       }
     } catch (error) {
-      console.log("akira error");
       res.status(500);
       res.json({ message: "Error creating or finding a store", error });
     }
