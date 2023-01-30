@@ -14,7 +14,7 @@ import { fetcher } from "../../../utils";
 export const CoffeStore = (initialProps) => {
   const router = useRouter();
   const id = router.query.id;
-  const [coffeeStore, setCoffeeStore] = useState(initialProps.coffeeStore);
+  const [coffeeStore, setCoffeeStore] = useState(initialProps.coffeeStore || {});
   const {
     state: { coffeeStores },
   } = useContext(StoreContext);
@@ -32,8 +32,8 @@ export const CoffeStore = (initialProps) => {
     } else {
       handleCreateCoffeeStore(initialProps.coffeeStore);
     }
-  }, [id, initialProps, initialProps.coffeeStore]);
-
+  }, [id, initialProps.coffeeStore, coffeeStores]);
+  //
   const { name, neighborhood, imgUrl, address } = coffeeStore;
   const [votingCount, setVotingCount] = useState(0);
 
