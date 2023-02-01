@@ -9,7 +9,7 @@ import { fetchCoffeeStores } from "../../../lib/coffee-stores";
 import { StoreContext } from "../../../context/store-context";
 import axios from "axios";
 import useSWR from "swr";
-import { fetcher } from "../../../utils";
+import { fetcher, isEmpty } from "../../../utils";
 
 export const CoffeStore = (initialProps) => {
   const router = useRouter();
@@ -20,14 +20,13 @@ export const CoffeStore = (initialProps) => {
   } = useContext(StoreContext);
 
   useEffect(() => {
-    if (initialProps.coffeeStore.length > 0) {
-      const found = coffeeStores.find((store) => {
-        return store.id.toString() === id;
-      });
-
-      if (found) {
-        setCoffeeStore(found);
-        handleCreateCoffeeStore(found);
+    if (isEmpty(initialProps.coffeeStore)) {
+      if (coffeeStores.length > 0) {
+        const findCoffeeStoreById = coffeeStores.find((coffeeStore) => {
+          return coffeeStore.id.toString() === id; //dynamic id
+        });
+        setCoffeeStore(findCoffeeStoreById);
+        handleCreateCoffeeStore(findCoffeeStoreById);
       }
     } else {
       handleCreateCoffeeStore(initialProps.coffeeStore);
