@@ -33,7 +33,7 @@ export const CoffeStore = (initialProps) => {
       handleCreateCoffeeStore(initialProps.coffeeStore);
     }
   }, [id, initialProps.coffeeStore, coffeeStores]);
-  //
+
   const { name, neighborhood, imgUrl, address } = coffeeStore;
   const [votingCount, setVotingCount] = useState(0);
 

@@ -7,7 +7,6 @@
     "build": "next build",
     "start": "next start",
     "prettier": "prettier --write '**/*.{js,json,md,html}'",
-    "lint": "next lint",
     "format": "eslint --fix . --ext js --ext jsx && prettier --write '**/*.{js,json,md,html}'",
     "lint": "next lint"
   },
